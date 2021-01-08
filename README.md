@@ -48,10 +48,10 @@ are created
 
 * `name` – (Required) Service name. This is used to form the name of alarm(s).
 
-* `tags` – (Optional) Tags to be applied to resources where supported.
+* `subscriptions` (Optional) A [subscriptions](#subscriptions) block. The
+`subscriptions` block is documented below.
 
-* (Optional) A [subscriptions](#subscriptions) block. `subscriptions` blocks
-are documented below.
+* `tags` – (Optional) Tags to be applied to resources where supported.
 
 `subscriptions`
 ------------------

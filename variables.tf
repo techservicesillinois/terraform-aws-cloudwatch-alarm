@@ -4,9 +4,9 @@ variable "ecs_cluster" {
 }
 
 variable "ecs_services" {
-  default     = null
   type        = list(string)
   description = "List of ECS services for which alarms are created"
+  default     = null
 }
 
 variable "name" {

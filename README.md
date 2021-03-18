@@ -6,9 +6,9 @@ Provides CloudWatch alarms. This module's support is currently limited to ECS
 services, and currently supports only the `CPUUtilization` and `MemoryUtilization`
 metrics.
 
-In this minimum viable implementation, the CloudWatch alarm period,
-statistic, and threshold are hardcoded, though different thresholds are
-applied to the `CPUUtilization` and `MemoryUtilization` metrics.
+In this minimum viable implementation, the CloudWatch alarm period, and
+statistic are hardcoded. Thresholds for the `CPUUtilization` and
+`MemoryUtilization` metrics can be specified by the caller; both values are numeric percentages.
 
 Example Usage
 -----------------
@@ -17,7 +17,7 @@ Example Usage
 module "alarm" {
   source = "git@github.com:techservicesillinois/terraform-aws-cloudwatch-alarm"
 
-    name = "foo"
+  name = "foo"
 
   subscriptions = [
       {
@@ -28,11 +28,17 @@ module "alarm" {
 
   ecs_cluster = "foo"
 
-  ecs_services = [
-    "foo-daemon",
-    "foo-ui",
-  ]
+  ecs_services = {
+    "foo-daemon" = {
+      cpu    = 90
+      memory = 85
+    },
 
+    "foo-ui" = {
+      cpu    = 75
+      memory = 75
+    }
+  }
 }
 ```
 
@@ -42,9 +48,10 @@ Argument Reference
 The following arguments are supported:
 
 * `ecs_cluster` – (Required) ECS cluster containing services for which alarms
-are created
+are created.
 
-* `ecs_services` – (Optional) List of ECS services for which alarms are created.
+* `ecs_services` – (Optional) Map of ECS services for which alarms are created; key is name of service and value is an object with the attributes `cpu` and `memory`.
+Both attributes are numeric values.
 
 * `name` – (Required) Service name. This is used to form the name of alarm(s).
 

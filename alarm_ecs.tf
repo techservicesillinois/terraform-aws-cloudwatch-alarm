@@ -4,6 +4,8 @@ locals {
   alarm_description_fmt = "%s ECS %s exceeds threshold (%d%%)"
   alarm_name_fmt        = "ecs-%s-%s"
 
+  ecs_services = (var.ecs_services) != null ? var.ecs_services : {}
+
   # Parameters common to ECS alarms.
 
   alarm_common = {
@@ -14,29 +16,29 @@ locals {
     statistic           = "Average"
   }
 
-  # Data for ECS CPU alarms. These are "mandatory defaults." See Figure 1.
+  # Data for ECS CPU alarms.
 
   ecs_cpu_alarms = {
-    for service in var.ecs_services :
+    for service in keys(local.ecs_services) :
     format("%s:%s", service, "cpu") => {
       key         = "cpu"
       metric_name = "CPUUtilization"
       alarm_name  = format(local.alarm_name_fmt, service, "cpu")
       service     = service
-      threshold   = 90
+      threshold   = local.ecs_services[service].cpu
     }
   }
 
-  # Data for ECS memory alarms. These are "mandatory defaults." See Figure 1.
+  # Data for ECS memory alarms.
 
   ecs_memory_alarms = {
-    for service in var.ecs_services :
+    for service in keys(local.ecs_services) :
     format("%s:%s", service, "memory") => {
       key         = "memory"
       metric_name = "MemoryUtilization"
       alarm_name  = format(local.alarm_name_fmt, service, "memory")
       service     = service
-      threshold   = 85
+      threshold   = local.ecs_services[service].memory
     }
   }
 }

@@ -4,8 +4,8 @@ variable "ecs_cluster" {
 }
 
 variable "ecs_services" {
-  type        = list(string)
-  description = "List of ECS services for which alarms are created"
+  description = "Map of ECS services for which alarms are created; key is name of service and value is an object with the attributes `cpu` and `memory`"
+  type        = map(object({ cpu = number, memory = number }))
   default     = null
 }
 

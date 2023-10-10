@@ -21,12 +21,15 @@ module "alarm" {
 
   subscriptions = [
       {
+        protocol = "email"
+        endpoint = "admin@example.com"
+      },
+
+      {
         protocol = "sms"
         endpoint = "+18005551212"
       },
   ]
-
-  ecs_cluster = "foo"
 
   ecs_services = {
     "foo-daemon" = {
@@ -47,13 +50,13 @@ Argument Reference
 
 The following arguments are supported:
 
-* `ecs_cluster` – (Required) ECS cluster containing services for which alarms
+* `ecs_cluster` – (Optional) ECS cluster containing services for which alarms
 are created.
 
-* `ecs_services` – (Optional) Map of ECS services for which alarms are created; key is name of service and value is an object with the attributes `cpu` and `memory`.
+* `ecs_services` – (Optional) Map of ECS services for which metric alarms are created; key is name of service and value is an object with the attributes `cpu` and `memory`.
 Both attributes are numeric values.
 
-* `name` – (Required) Service name. This is used to form the name of alarm(s).
+* `name` – (Required) Service name. This is used to form the name of metric alarm(s).
 
 * `subscriptions` (Optional) A [subscriptions](#subscriptions) block. The
 `subscriptions` block is documented below.
@@ -63,20 +66,14 @@ Both attributes are numeric values.
 `subscriptions`
 ------------------
 
-A `subscription` block consists of a list containing one or more maps, each
-of which must contain the following keys:
-
-* `protocol` – (Required) The protocol to use. The fully-supported values
-for this are: `sqs`, `sms`, `lambda`, `application`.
+A `subscription` block consists of a list containing one or more maps, wherein each
+map must contain the following keys:
 
 * `endpoint` – (Required) The endpoint to send data to, the contents will
 vary with the protocol.
 
-**Note:** AWS supports additional `email` and `email-json` protocols that are
-not supported by Terraform because the authorization process does not generate
-an ARN until the target email address has been validated.
-However, subscriptions using the `email` and `email-json` protocols can be
-created in the AWS console.
+* `protocol` – (Required) The protocol to use. The fully-supported values
+for this are: `email`, `sqs`, `sms`, `lambda`, `application`.
 
 Additionally, `http` and `https` protocols are only partially supported by
 Terraform.
@@ -90,6 +87,8 @@ Attributes Reference
 
 The following attributes are exported:
 
-* `alarm_arn` – List consisting of ARNs of each alarm managed by the module.
+* `metric_alarms` – List consisting of ARNs of each CloudWatch metric alarm managed by the module.
 
-* `topic_arn` - ARN of the SNS alarm topic for this service.
+* `subscriptions` – List containing the subscriptions managed for the SNS topic. The format of each member of this list is `protocol:endpoint`.
+
+* `topic` - ARN of the SNS topic used for this service.

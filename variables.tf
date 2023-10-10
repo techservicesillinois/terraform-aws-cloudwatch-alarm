@@ -1,7 +1,6 @@
 variable "ecs_cluster" {
   type        = string
   description = "ECS cluster containing services for which alarms are created"
-  default     = null
 }
 
 variable "ecs_services" {

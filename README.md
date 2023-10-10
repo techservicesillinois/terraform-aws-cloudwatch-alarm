@@ -17,7 +17,8 @@ Example Usage
 module "alarm" {
   source = "git@github.com:techservicesillinois/terraform-aws-cloudwatch-alarm"
 
-  name = "foo"
+  name        = "foo"
+  ecs_cluster = "default"
 
   subscriptions = [
       {
@@ -50,7 +51,7 @@ Argument Reference
 
 The following arguments are supported:
 
-* `ecs_cluster` – (Optional) ECS cluster containing services for which alarms
+* `ecs_cluster` – (Required) ECS cluster containing services for which alarms
 are created.
 
 * `ecs_services` – (Optional) Map of ECS services for which metric alarms are created; key is name of service and value is an object with the attributes `cpu` and `memory`.

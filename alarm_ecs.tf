@@ -63,6 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_services" {
     ServiceName = each.value.service
   }
 
-  alarm_actions = [aws_sns_topic.default.arn]
+  alarm_actions = [module.topic.topic_arns[0]]
+  ok_actions    = [module.topic.topic_arns[0]]
   tags          = merge(var.tags, { Name = each.value.alarm_name })
 }

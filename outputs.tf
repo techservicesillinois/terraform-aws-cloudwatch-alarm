@@ -1,3 +1,7 @@
+output "lambda_alarms" {
+  value = [for alarm in module.lambda.alarms : alarm.arn]
+}
+
 output "metric_alarms" {
   value = [for alarm in aws_cloudwatch_metric_alarm.ecs_services : alarm.arn]
 }

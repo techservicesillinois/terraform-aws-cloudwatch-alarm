@@ -9,6 +9,12 @@ variable "ecs_services" {
   default     = null
 }
 
+variable "lambda_functions" {
+  description = "List of lambda functions for which alarms are created"
+  type        = list(string)
+  default     = []
+}
+
 variable "name" {
   type        = string
   description = "Service name"
